@@ -1,0 +1,39 @@
+CREATE MATERIALIZED VIEW mv_data\n" +
+                    "ENGINE = SummingMergeTree()\n" +
+                    "PARTITION BY col1\n" +
+                    "ORDER BY (col1)\n" +
+                    "AS \n" +
+                    "SELECT \n" +
+                    "    col1, \n" +
+                    "    sum(col2) AS col2_sum \n" +
+                    "FROM data_table \n" +
+                    "GROUP BY col1;
+
+
+
+
+DROP MATERIALIZED VIEW IF EXISTS mv_data;
+
+
+
+ public List<DataTable> materializedView(){
+        List<DataTable> createMv = new ArrayList<>();
+        try {
+            Connection conn = clickHouseDataSource.getConnection();
+            PreparedStatement stmt = conn.prepareStatement("CREATE MATERIALIZED VIEW mv_data\n" +
+                    "ENGINE = SummingMergeTree()\n" +
+                    "PARTITION BY col1\n" +
+                    "ORDER BY (col1)\n" +
+                    "AS \n" +
+                    "SELECT \n" +
+                    "    col1, \n" +
+                    "    sum(col2) AS col2_sum \n" +
+                    "FROM data_table \n" +
+                    "GROUP BY col1");
+            ResultSet rs = stmt.executeQuery();
+            conn.close();
+        } catch (SQLException e) {
+            log.error(e.getMessage());
+        }
+        return createMv;
+    }

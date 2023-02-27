@@ -1,0 +1,96 @@
+CREATE TABLE data_table (
+  col1 Int64,
+  col2 Int64,
+  col3 Int64,
+  col4 Int64,
+  col5 Int64,
+  col6 Int64,
+  col7 Int64,
+  col8 Int64,
+  col9 Int64,
+  col10 Int64,
+  col11 Int64,
+  col12 Int64,
+  col13 Int64,
+  col14 Int64,
+  col15 Int64,
+  col16 Int64,
+  col17 Int64,
+  col18 Int64,
+  col19 Int64,
+  col20 Int64
+) ENGINE = MergeTree() ORDER BY tuple();
+
+INSERT INTO data_table
+SELECT number % 100 AS col1,
+       number % 1000 AS col2,
+       number % 10000 AS col3,
+       number % 100000 AS col4,
+       number % 1000000 AS col5,
+       number % 100 AS col6,
+       number % 1000 AS col7,
+       number % 10000 AS col8,
+       number % 100000 AS col9,
+       number % 1000000 AS col10,
+       number % 100 AS col11,
+       number % 1000 AS col12,
+       number % 10000 AS col13,
+       number % 100000 AS col14,
+       number % 1000000 AS col15,
+       number % 100 AS col16,
+       number % 1000 AS col17,
+       number % 10000 AS col18,
+       number % 100000 AS col19,
+       number % 1000000 AS col20
+FROM system.numbers
+LIMIT 1000000;
+
+ALTER TABLE  
+default.data_table 
+ADD INDEX  
+col1Index(col1)  
+TYPE minmax
+GRANULARITY 8192;
+
+
+CREATE INDEX data_table_ind ON data_table (col1) TYPE MergeTree() ORDER BY col1;
+SHOW CREATE TABLE data_table;
+SHOW INDEXES FROM data_table;
+
+
+
+(CronScheduleBuilder.cronSchedule("0 0/1 * 1/1 * ? *")
+ her saat başında (0 0/1 *) ve her gün (1/1 *) çalıştırılacak bir görevi belirtir.
+ ? karakteri günlerin işaretlendiği bir alandır ve belirli bir günü belirtmek yerine
+ "her gün" anlamına gelir. Son olarak * karakterleri yılın, ayın ve haftanın
+ günlerinde işaretlenmiş alanlardır ve "her yıl", "her ay" ve "her hafta"
+ anlamına gelir.
+
+
+Scheduler – the primary API for interacting with the scheduler of the framework
+(Zamanlayıcı - çerçevenin zamanlayıcısı ile etkileşim için birincil API)
+Job – an interface to be implemented by components that we wish to have executed
+(İş - yürütmek istediğimiz bileşenler tarafından uygulanacak bir arayüz)
+JobDetail – used to define instances of Jobs
+(JobDetail – Job s örneklerini tanımlamak için kullanılır)
+Trigger – a component that determines the schedule upon which a given Job will be performed
+(Tetikleyici – belirli bir İşin gerçekleştirileceği programı belirleyen bir bileşen)
+JobBuilder – used to build JobDetail instances, which define instances of Jobs
+(JobBuilder – İşlerin örneklerini tanımlayan JobDetail örneklerini oluşturmak için kullanılır)
+TriggerBuilder – used to build Trigger instances
+(TriggerBuilder – Trigger örnekleri oluşturmak için kullanılır)
+
+
+<max_memory_usage_to_use_for_all_queries>0</max_memory_usage_to_use_for_all_queries>
+Bu yapılandırmayı yapmanız önbellek kullanımını devre dışı bırakacaktır ve ClickHouse
+ işlemlerinizin doğrudan veritabanına erişim sağlamasını sağlayacaktır.
+
+
+
+
+
+
+
+
+
+
